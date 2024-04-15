@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="">
+<head>
+    <title>W3.CSS Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+</head>
+<body>
+
+<!--FRAGMENT -->
+<th:block th:insert="~{navbar}"></th:block>
+
+<!-- Header -->
+<header class="w3-display-container w3-content w3-wide" style="max-width:1500px;" id="home">
+    <center>
+    <img class="w3-image" src="https://ichef.bbci.co.uk/images/ic/768x432/p060dh18.jpg" alt="Architecture" width="1300" style="padding: 60px;">
+    </center>
+    <div class="w3-display-middle w3-margin-top w3-center">
+        <h1 class="w3-xxlarge w3-text-white"><span class="w3-padding w3-black w3-opacity-min"><b>NEWS CRAWLER</b></span></h1>
+    </div>
+</header>
+
+<!-- Page content -->
+<div class="w3-content w3-padding" style="max-width:1564px">
+
+    <!-- Project Section -->
+    <div class="w3-container w3-padding-32" id="projects">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">ЗАЩО ДА ИЗБЕРЕМ NEWS CRAWLER?</h3>
+    </div>
+
+    <div class="w3-row-padding">
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">НАЙ-ДОСТОВЕРНИТЕ НОВИНИ</div>
+                <img src="https://www.datocms-assets.com/17507/1636551372-illustration-essentiel-news-en-1.jpg?fit=max&fm=webp&q=60&w=600" alt="House" style="width:100%">
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">НАЙ-НОВИТЕ НОВИНИ</div>
+                <img src="https://media.istockphoto.com/id/1313303632/video/breaking-news-template-intro-for-tv-broadcast-news-show-program-with-3d-breaking-news-text.jpg?s=640x640&k=20&c=S0dTZp37XKVcCAnoguMnRatvv4Nkp2cjmA5aYOOrJs8=" alt="House" style="width:100%">
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">НАЙ-ИНТЕРЕСНИТЕ НОВИНИ</div>
+                <img src="https://media.istockphoto.com/id/487440298/video/breaking-news-broadcast-animation-graphic-title-4k.jpg?s=640x640&k=20&c=BOiUYXfD2mfyX7t0n1P4PuKFDnim0fckaDFYOh1jnYQ=" alt="House" style="width:100%">
+            </div>
+        </div>
+        <div class="w3-col l3 m6 w3-margin-bottom">
+            <div class="w3-display-container">
+                <div class="w3-display-topleft w3-black w3-padding">ЕЖЕДНЕВНО ОПРЕСНЯВАНЕ</div>
+                <img src="https://media.istockphoto.com/id/1282534827/video/breaking-news-background.jpg?s=640x640&k=20&c=AExq_4mADPtZPw8oO5z6etza6OVbstRGn5O_5yJOzRA=" alt="House" style="width:100%">
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="w3-container w3-padding-32" id="about">
+        <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Какво е NEWS CRAWLER?</h3>
+        <p>Превърнете вашите новинарски изследвания в поточни и същевременно забавни пътувания с нашия нов уеб паяк! Нашата интелигентна система позволява на потребителите да следят актуалните
+            новини от любимите им сайтове, като използват само най-важните за тях ключови думи.
+            Сега, когато вече имате двата най-добри новинарски източника - Dnevnik.bg и Vesti.bg, на ваше разположение е нашият удобен уеб интерфейс. Само добавете ключовите думи, които ви
+            интересуват - "парламент", "избори", "Папи Ханс", "програмиране" и наблюдавайте как системата ни ви доставя статистика всеки ден за това колко пъти се срещат тези думи в заглавията на новините.
+            Не само това, но с нашия бутон "Обнови статистика" можете да актуализирате данните си във всеки момент или дори да настроите автоматично обновяване чрез нашата интегрирана функционалност @Scheduled.
+            Не пропускайте нито една важна информация - включете се в нашата новинарска революция сега!
+        </p>
+    </div>
+</body>
+</html>
