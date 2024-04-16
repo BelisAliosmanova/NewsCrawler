@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Ключови думи</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
+    <!--    LINKS  -->
+    <th:block th:insert="~{fragments/links}"></th:block>
+</head>
+<body>
+
+<!--FRAGMENT -->
+<th:block th:insert="~{fragments/navbar}"></th:block>
+
+<main class="content">
+    <div class="row">
+        <div class="col-lg-4 mx-auto">
+            <div class="table table-striped" style="padding: 60px;">
+                <div class="text-center">
+                    <a href="/keywords/create" class="btn btn-primary">Създай нова ключова дума</a>
+                </div>
+                <table class="table" style="padding: 50px;">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Ключова дума</th>
+                        <th>Редактирай</th>
+                        <th>Изтрий</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="keyword : ${keywords}" data-id="${keyword.id}" class="keyword-row">
+                        <td th:text="${keyword.id}"></td>
+                        <td th:text="${keyword.name}"></td>
+                        <td>
+                            <form th:action="@{'/keywords/update/' + ${keyword.id}}"
+                                  method="get">
+                                <button type="submit" class="btn btn-primary">Редактирай</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:action="@{'/keywords/delete/' + ${keyword.id}}" method="post">
+                                <button type="submit" class="btn btn-danger">Изтрий</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>

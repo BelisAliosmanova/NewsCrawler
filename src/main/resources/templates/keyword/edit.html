@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Ключови думи</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
+    <!--    LINKS  -->
+    <th:block th:insert="~{fragments/links}"></th:block>
+</head>
+<body>
+<!--FRAGMENT -->
+<th:block th:insert="~{fragments/navbar}"></th:block>
+
+
+<!--    HAVBAR  -->
+<th:block th:insert="~{fragments/navbar}"></th:block>
+<div style="width: 500px; margin: 0 auto;">
+    <form action="#" th:action="@{'/keywords/update/' + ${keyword.id}}" th:object="${keyword}" method="post"  style="padding: 90px;">
+        <div class="mb-3">
+            <label for="name" class="form-label">Ключова дума:</label>
+            <input type="text" th:field="*{name}" id="name" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Редактирай ключовата дума</button>
+    </form>
+    <h4>Вашите ключови думи досега</h4>
+    <div class="table table-striped">
+        <table class="table" style="padding: 50px;">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Ключова дума</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="keyword : ${keywords}" data-id="${keyword.id}" class="keyword-row">
+                <td th:text="${keyword.id}"></td>
+                <td th:text="${keyword.name}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

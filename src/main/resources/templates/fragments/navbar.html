@@ -1,0 +1,18 @@
+<!-- Navbar (sit on top) -->
+<div class="w3-top" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div class="w3-bar w3-grey w3-wide w3-padding w3-card">
+    <a href="/home" class="w3-bar-item w3-button"><b>NEWS</b> CRAWLER</a>
+    <!-- Float links to the right. Hide them on small screens -->
+    <div th:if="${not #authorization.expression('isAuthenticated()')}">
+      <a href="/login" class="w3-bar-item w3-button">Впиши се</a>
+      <a href="/register" class="w3-bar-item w3-button">Регистрирай се</a>
+    </div>
+    <div th:if="${#authorization.expression('isAuthenticated()')}">
+      <a href="/keywords" class="w3-bar-item w3-button">Моите ключови думи</a>
+      <!-- Add the logout link here -->
+      <form th:action="@{/logout}" method="post">
+        <input  class="w3-bar-item w3-button" type="submit" value="Излез"/>
+      </form>
+    </div>
+  </div>
+</div>
