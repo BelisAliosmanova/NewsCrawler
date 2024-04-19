@@ -1,4 +1,4 @@
-package com.web.crawler.WebCrawler.crawler;
+package com.web.crawler.WebCrawler.crawler.VestiBg;
 
 import com.web.crawler.WebCrawler.entities.NewsFilter;
 import com.web.crawler.WebCrawler.repositories.NewsFilterRepository;
@@ -14,13 +14,13 @@ import java.io.File;
 import java.util.List;
 
 @Service
-public class DnevnikBgCrawlerService {
-    private static final String NEWS_SITE = "dnevnik.bg";
+public class VestiBgCrawlerService {
+    private static final String NEWS_SITE = "vesti.bg";
     private final NewsFilterRepository newsFilterRepository;
 
     private final NewsRepository newsRepository;
 
-    public DnevnikBgCrawlerService(NewsFilterRepository newsFilterRepository, NewsRepository newsRepository) {
+    public VestiBgCrawlerService(NewsFilterRepository newsFilterRepository, NewsRepository newsRepository) {
         this.newsFilterRepository = newsFilterRepository;
         this.newsRepository = newsRepository;
     }
@@ -47,7 +47,7 @@ public class DnevnikBgCrawlerService {
 
         CrawlController controller = getCrawlController(baseUrl, config);
         controller.start(
-                new DnevnikBgFactory(newsFilter, newsRepository), numCrawlers);
+                new VestiBgFactory(newsFilter, newsRepository), numCrawlers);
     }
 
     public void crawl() throws Exception {
