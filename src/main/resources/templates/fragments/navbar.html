@@ -10,6 +10,7 @@
     </div>
     <div th:if="${#authorization.expression('isAuthenticated()')}">
       <a href="/keywords" class="w3-bar-item w3-button">Моите ключови думи</a>
+      <a href="/keywords/occurrences" class="w3-bar-item w3-button">Статистика</a>
       <!-- Add the logout link here -->
       <form th:action="@{/logout}" method="post">
         <input  class="w3-bar-item w3-button" type="submit" value="Излез"/>

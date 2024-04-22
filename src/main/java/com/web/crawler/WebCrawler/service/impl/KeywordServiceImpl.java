@@ -4,6 +4,7 @@ import com.web.crawler.WebCrawler.entities.Keyword;
 import com.web.crawler.WebCrawler.entities.User;
 import com.web.crawler.WebCrawler.repositories.KeywordRepository;
 import com.web.crawler.WebCrawler.repositories.UserRepository;
+import com.web.crawler.WebCrawler.service.KeywordOccurrenceService;
 import com.web.crawler.WebCrawler.service.KeywordService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.core.Authentication;
@@ -11,16 +12,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
 public class KeywordServiceImpl implements KeywordService {
     private final KeywordRepository keywordRepository;
     private final UserRepository userRepository;
+    private final KeywordOccurrenceService keywordOccurrenceService;
 
-    public KeywordServiceImpl(KeywordRepository keywordRepository, UserRepository userRepository) {
+    public KeywordServiceImpl(KeywordRepository keywordRepository, UserRepository userRepository, KeywordOccurrenceService keywordOccurrenceService) {
         this.keywordRepository = keywordRepository;
         this.userRepository = userRepository;
+        this.keywordOccurrenceService = keywordOccurrenceService;
     }
 
     @Override
@@ -29,17 +33,17 @@ public class KeywordServiceImpl implements KeywordService {
         User user = userRepository.findByUsername(auth.getName());
 
         // Return only logged user's keywords
-        List<Keyword> keywords = keywordRepository.findAll();
+        List<Keyword> keywords = keywordRepository.findAllByDeletedFalse();
 
         //Replaced while loop 'Collection.removeIf' suggested from the IJ
-        keywords.removeIf(keyword -> keyword.getUserId().getId() != user.getId());
+        keywords.removeIf(keyword -> !Objects.equals(keyword.getUserId().getId(), user.getId()));
 
         return keywords;
     }
 
     @Override
     public Keyword getKeywordById(Long id) {
-        Optional<Keyword> keyword = keywordRepository.findById(id);
+        Optional<Keyword> keyword = keywordRepository.findByIdAndDeletedFalse(id);
         if (keyword.isPresent()) {
             return keyword.get();
         }
@@ -53,12 +57,14 @@ public class KeywordServiceImpl implements KeywordService {
         User user = userRepository.findByUsername(auth.getName());
 
         keyword.setUserId(user);
-        return keywordRepository.save(keyword);
+        Keyword savedKeyword = keywordRepository.save(keyword);
+        keywordOccurrenceService.generateDailyKeywordStatistics();
+        return savedKeyword;
     }
 
     @Override
     public Keyword updateKeyword(Long id, Keyword newKeyword) {
-        Optional<Keyword> existingKeywordOptional = keywordRepository.findById(id);
+        Optional<Keyword> existingKeywordOptional = keywordRepository.findByIdAndDeletedFalse(id);
 
         if (existingKeywordOptional.isEmpty()) {
             throw new EntityNotFoundException("The keyword is not found!");
@@ -70,9 +76,10 @@ public class KeywordServiceImpl implements KeywordService {
 
     @Override
     public void deleteKeyword(Long id) {
-        Optional<Keyword> keyword = keywordRepository.findById(id);
+        Optional<Keyword> keyword = keywordRepository.findByIdAndDeletedFalse(id);
         if (keyword.isPresent()) {
-            keywordRepository.delete(keyword.get());
+            keyword.get().setDeleted(true);
+            keywordRepository.save(keyword.get());
         } else {
             throw new EntityNotFoundException("The keyword is not found!");
         }

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Ключови думи</title>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.22.4/dist/bootstrap-table.min.css">
+    <!--    LINKS  -->
+    <th:block th:insert="~{fragments/links}"></th:block>
+</head>
+<body>
+
+<!--FRAGMENT -->
+<th:block th:insert="~{fragments/navbar}"></th:block>
+
+<main class="content">
+    <div class="row">
+        <div class="col-lg-4 mx-auto">
+            <div class="table table-striped" style="padding: 60px;">
+                <table class="table" style="padding: 50px;">
+                    <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Ключова дума</th>
+                        <th>Брой срещнати пъти</th>
+                        <th>Дата</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="keywordOccurrence : ${keywordOccurrences}" data-id="${keywordOccurrence.id}" class="keyword-row">
+                        <td th:text="${keywordOccurrence.keywordId.id}"></td>
+                        <td th:text="${keywordOccurrence.keywordId.name}"></td>
+                        <td th:text="${keywordOccurrence.dailyOccurrences}"></td>
+                        <td th:text="${keywordOccurrence.date}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+</div>
+</body>
+</html>
