@@ -36,7 +36,7 @@ public class DnevnikBgCrawlerService {
 
         return controller;
     }
-    private void processCrawl(NewsFilter newsFilter, String baseUrl) throws Exception {
+    public void processCrawl(NewsFilter newsFilter, String baseUrl) throws Exception {
         File crawlStorage = new File("src/test/resources/crawler4j");
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorage.getAbsolutePath());
