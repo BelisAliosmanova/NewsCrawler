@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -25,6 +26,7 @@ public class KeywordController {
     @GetMapping
     public String getAllKeywords(Model model) {
         List<Keyword> keywords = keywordService.getAllKeywordsForUser();
+        Collections.reverse(keywords);
         model.addAttribute("keywords", keywords);
         return "keyword/list";
     }
@@ -32,6 +34,7 @@ public class KeywordController {
     @GetMapping("/occurrences")
     public String getAllKeywordOccurrences(Model model) {
         List<KeywordOccurrence> keywordOccurrences = keywordOccurrenceService.allKeywordOccurrencesBuLoggedUser();
+        Collections.reverse(keywordOccurrences);
         model.addAttribute("keywordOccurrences", keywordOccurrences);
         return "keywordOccurrences/list";
     }

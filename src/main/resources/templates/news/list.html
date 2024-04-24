@@ -17,6 +17,13 @@
     <div class="row">
         <div class="col-lg-9 mx-auto">
             <div class="table table-striped" style="padding: 60px;">
+                <div class="mb-3">
+                    <center>
+                    <input type="text" id="searchInput" placeholder="Търси по име на сайт">
+                    <input type="text" id="searchInput2" placeholder="Търси по име на новина">
+                    <input type="text" id="searchInput1" placeholder="Търси по категория">
+                    </center>
+                </div>
                 <table class="table" style="padding: 50px;">
                     <thead>
                     <tr>
@@ -43,5 +50,45 @@
         </div>
     </div>
 </main>
+
+
+<script>
+    // JavaScript code to filter the table rows based on the search inputs
+    var searchInput = document.getElementById("searchInput");
+    var searchInput2 = document.getElementById("searchInput2");
+    var searchInput1 = document.getElementById("searchInput1");
+
+    function filterTable() {
+        var filter1 = searchInput.value.toUpperCase();
+        var filter2 = searchInput2.value.toUpperCase();
+        var filter3 = searchInput1.value.toUpperCase();
+        var table = document.querySelector(".table");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 0; i < tr.length; i++) {
+            var td1 = tr[i].getElementsByTagName("td")[1]; // Index 1 corresponds to the site name column
+            var td2 = tr[i].getElementsByTagName("td")[2]; // Index 2 corresponds to the news heading column
+            var td3 = tr[i].getElementsByTagName("td")[3]; // Index 3 corresponds to the category column
+            if (td1 && td2 && td3) {
+                var txtValue1 = td1.textContent || td1.innerText;
+                var txtValue2 = td2.textContent || td2.innerText;
+                var txtValue3 = td3.textContent || td3.innerText;
+                if (txtValue1.toUpperCase().indexOf(filter1) > -1 &&
+                    txtValue2.toUpperCase().indexOf(filter2) > -1 &&
+                    txtValue3.toUpperCase().indexOf(filter3) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    // Add event listeners to all search input fields
+    searchInput.addEventListener("keyup", filterTable);
+    searchInput2.addEventListener("keyup", filterTable);
+    searchInput1.addEventListener("keyup", filterTable);
+</script>
+
 </body>
 </html>

@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -22,6 +23,7 @@ public class NewsController {
     @GetMapping
     public String getAllNews(Model model) {
         List<News> news = newsRepository.findAll();
+        Collections.reverse(news);
         model.addAttribute("allNews", news);
         return "news/list";
     }
