@@ -16,33 +16,34 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 public class DnevnikBgCrawler extends WebCrawler {
-    private final NewsFilter newsFilter;
+    private final NewsFilter newsFilter; // Филтър за новини
 
-    private final NewsRepository newsRepository;
+    private final NewsRepository newsRepository; // Репозиторий за новини
 
-    private final static String SITE = "https://www.dnevnik.bg/";
+    private final static String SITE = "https://www.dnevnik.bg/"; // Основен уебсайт
 
     private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
-            + "|png|mp3|mp4|zip|gz))$");
+            + "|png|mp3|mp4|zip|gz))$"); // Филтър за файлови разширения, които да се игнорират
 
     public DnevnikBgCrawler(NewsFilter newsFilter, NewsRepository newsRepository) {
         this.newsFilter = newsFilter;
         this.newsRepository = newsRepository;
     }
 
+    // Проверява дали трябва да се посети даден URL адрес
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String urlString = url.getURL();
         Pattern pattern = Pattern.compile("\\d{4}/\\d{2}/\\d{2}");
 
-        boolean areTheNewsFromToday = areTheNewsFromToday(urlString, pattern);
+        boolean areTheNewsFromToday = areTheNewsFromToday(urlString, pattern); // Проверка дали новините са от днес
 
         return urlString.matches(".*/\\d{4}/\\d{2}/\\d{2}/\\d+_.*") && !FILTERS.matcher(urlString).matches()
                 && areTheNewsFromToday && urlString.startsWith(SITE);
     }
 
+    // Посещава страницата и обработва нейното съдържание
     @Override
     public void visit(Page page) {
         if (page.getParseData() instanceof HtmlParseData htmlParseData && !page.getWebURL().toString().contains("paged=")) {
@@ -52,7 +53,7 @@ public class DnevnikBgCrawler extends WebCrawler {
             String heading = extractHeading(html);
             if (heading != null) {
                 try {
-                    saveNews(url, html);
+                    saveNews(url, html); // Запазва новината в базата данни
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
@@ -60,6 +61,7 @@ public class DnevnikBgCrawler extends WebCrawler {
         }
     }
 
+    // Запазва новината в базата данни
     public void saveNews(String url, String html) throws URISyntaxException {
         String heading = extractHeading(html);
         String category = extractCategoryName(url);
@@ -74,23 +76,25 @@ public class DnevnikBgCrawler extends WebCrawler {
         newsRepository.save(news);
     }
 
+    // Извлича категорията на новината от URL адреса
     public String extractCategoryName(String url) throws URISyntaxException {
         if (url.startsWith(SITE)) {
-            // Get the substring after "https://www.dnevnik.bg/"
+            // Взима частта от URL адреса след "https://www.dnevnik.bg/"
             String remainingURL = url.substring(SITE.length());
-            // Find the index of the next "/"
+            // Намира индекса на следващия "/"
             int nextSlashIndex = remainingURL.indexOf("/");
             if (nextSlashIndex != -1) {
-                // Extract the substring before the next "/"
+                // Извлича частта от URL адреса преди следващия "/"
                 return remainingURL.substring(0, nextSlashIndex);
             } else {
-                // If there is no "/", return the remaining string
+                // Ако няма "/", връща останалата част от URL адреса
                 return remainingURL;
             }
         }
         return null;
     }
 
+    // Извлича заглавието на новината от HTML кода на страницата
     public String extractHeading(String html) {
         Document document = Jsoup.parse(html);
         Element headingElement = document.selectFirst("h1[itemprop=\"name headline\"]");
@@ -107,6 +111,7 @@ public class DnevnikBgCrawler extends WebCrawler {
         return null;
     }
 
+    // Проверява дали новината е от днес
     private boolean areTheNewsFromToday(String urlString, Pattern pattern) {
         Matcher matcher = pattern.matcher(urlString);
         if (matcher.find()) {

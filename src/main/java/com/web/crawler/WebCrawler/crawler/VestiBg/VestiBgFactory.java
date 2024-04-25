@@ -6,6 +6,7 @@ import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 
 
+// Създава нова инстанция на VestiBgCrawler
 public class VestiBgFactory implements CrawlController.WebCrawlerFactory<WebCrawler> {
     private final NewsFilter newsFilter;
     private final NewsRepository newsRepository;

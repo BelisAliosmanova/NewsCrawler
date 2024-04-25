@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.List;
 
+// В този клас няма особено много бизнес логика, повечето неща са общи за всички паяци
 @Service
 public class DnevnikBgCrawlerService {
-    private static final String NEWS_SITE = "dnevnik.bg";
+    private static final String NEWS_SITE = "dnevnik.bg"; // Уебсайт за новини
+
     private final NewsFilterRepository newsFilterRepository;
 
     private final NewsRepository newsRepository;
@@ -25,6 +27,7 @@ public class DnevnikBgCrawlerService {
         this.newsRepository = newsRepository;
     }
 
+    // Получава контролер за краулинг с базов URL и конфигурация
     private static CrawlController getCrawlController(String baseUrl, CrawlConfig config) throws Exception {
         PageFetcher pageFetcher = new PageFetcher(config);
         RobotstxtConfig robotstxtConfig = new RobotstxtConfig();
@@ -33,23 +36,24 @@ public class DnevnikBgCrawlerService {
 
         controller.addSeed(baseUrl);
 
-
         return controller;
     }
+
+    // Обработва краулинга с даден филтър за новини и базов URL
     public void processCrawl(NewsFilter newsFilter, String baseUrl) throws Exception {
         File crawlStorage = new File("src/test/resources/crawler4j");
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlStorage.getAbsolutePath());
 
         int numCrawlers = 1;
-        int maxDepthOfCrawling = 2; // Set the maximum depth of crawling
+        int maxDepthOfCrawling = 2; // Задава максималната дълбочина на краулинга
         config.setMaxDepthOfCrawling(maxDepthOfCrawling);
 
         CrawlController controller = getCrawlController(baseUrl, config);
-        controller.start(
-                new DnevnikBgFactory(newsFilter, newsRepository), numCrawlers);
+        controller.start(new DnevnikBgFactory(newsFilter, newsRepository), numCrawlers);
     }
 
+    // Извършва краулинг
     public void crawl() throws Exception {
         List<NewsFilter> newsFilterList = newsFilterRepository.findAllByNewsSite(NEWS_SITE);
         if (!newsFilterList.isEmpty()) {

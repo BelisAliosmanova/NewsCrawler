@@ -18,21 +18,35 @@ import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Клас за сканиране на уеб страници на Vesti.bg за новини.
+ */
 public class VestiBgCrawler extends WebCrawler {
-    private final NewsFilter newsFilter;
+    private final NewsFilter newsFilter; // Филтър за новини
+    private final NewsRepository newsRepository; // Репозиторий за новини
 
-    private final NewsRepository newsRepository;
-
-    private final static String SITE = "https://www.vesti.bg/";
-
-    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg"
+    private final static String SITE = "https://www.vesti.bg/"; // Уеб сайт за сканиране
+    private final static Pattern FILTERS = Pattern.compile(".*(\\.(css|js|gif|jpg" // Филтър за игнориране на определени файлови разширения
             + "|png|mp3|mp4|zip|gz))$");
 
+    /**
+     * Конструктор за инициализиране на обект от класа.
+     *
+     * @param newsFilter    Филтър за новини
+     * @param newsRepository Репозиторий за новини
+     */
     public VestiBgCrawler(NewsFilter newsFilter, NewsRepository newsRepository) {
         this.newsFilter = newsFilter;
         this.newsRepository = newsRepository;
     }
 
+    /**
+     * Проверява дали трябва да се посети дадена уеб страница.
+     *
+     * @param referringPage Отнасяща се страница
+     * @param url           URL адрес на страницата
+     * @return true, ако трябва да се посети страницата, в противен случай - false
+     */
     @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String urlString = url.getURL();
@@ -41,6 +55,11 @@ public class VestiBgCrawler extends WebCrawler {
         return urlString.matches("https://www.vesti.bg/\\S+-\\d{7}") && !FILTERS.matcher(urlString).matches() && urlString.startsWith(SITE);
     }
 
+    /**
+     * Посещава дадена уеб страница и извлича новини от нея.
+     *
+     * @param page Посещавана страница
+     */
     @Override
     public void visit(Page page) {
         if (page.getParseData() instanceof HtmlParseData htmlParseData) {
@@ -62,6 +81,12 @@ public class VestiBgCrawler extends WebCrawler {
         }
     }
 
+    /**
+     * Проверява дали новините са от днес.
+     *
+     * @param html HTML съдържание на страницата
+     * @return true, ако новините са от днес, в противен случай - false
+     */
     private boolean areTheNewsFromToday(String html) {
         String createdDate = extractArticleTime(html);
         LocalDate createdDateLocalDate = dateToLocalDate(createdDate);
@@ -71,6 +96,12 @@ public class VestiBgCrawler extends WebCrawler {
         return createdDateLocalDate.isEqual(today);
     }
 
+    /**
+     * Извлича датата на публикуване на статията.
+     *
+     * @param htmlContent HTML съдържание на страницата
+     * @return Дата на публикуване на статията
+     */
     public static String extractArticleTime(String htmlContent) {
         Document document = Jsoup.parse(htmlContent);
 
@@ -79,6 +110,12 @@ public class VestiBgCrawler extends WebCrawler {
         return articleTimeElement.text().trim();
     }
 
+    /**
+     * Преобразува дата от стринг в LocalDate обект.
+     *
+     * @param date Стрингова представка на датата
+     * @return LocalDate обект, съдържащ датата
+     */
     public static LocalDate dateToLocalDate(String date) {
         try {
             String[] dateElements = date.split(",")[0].split("\\s+");
@@ -96,6 +133,13 @@ public class VestiBgCrawler extends WebCrawler {
         }
     }
 
+    /**
+     * Запазва новините в репозитория.
+     *
+     * @param url  URL адрес на статията
+     * @param html HTML съдържание на статията
+     * @throws URISyntaxException Грешка при невалиден URL адрес
+     */
     private void saveNews(String url, String html) throws URISyntaxException {
         String heading = extractHeading(html);
         String category = extractCategoryName(url);
@@ -110,6 +154,13 @@ public class VestiBgCrawler extends WebCrawler {
         newsRepository.save(news);
     }
 
+    /**
+     * Извлича името на категорията от URL адреса на статията.
+     *
+     * @param url URL адрес на статията
+     * @return Име на категорията
+     * @throws URISyntaxException Грешка при невалиден URL адрес
+     */
     public static String extractCategoryName(String url) throws URISyntaxException {
         if (url.startsWith(SITE)) {
             // Get the substring after "https://www.vesti.bg/"
@@ -127,6 +178,12 @@ public class VestiBgCrawler extends WebCrawler {
         return null;
     }
 
+    /**
+     * Извлича заглавието на статията от HTML съдържанието.
+     *
+     * @param html HTML съдържание на статията
+     * @return Заглавие на статията
+     */
     private String extractHeading(String html) {
         Document document = Jsoup.parse(html);
         Element headingElement = document.selectFirst("h1");
@@ -138,6 +195,7 @@ public class VestiBgCrawler extends WebCrawler {
         return null;
     }
 
+    // Проверява дали новините са от днес
     public static boolean areTheNewsFromToday(String urlString, Pattern pattern) {
         Matcher matcher = pattern.matcher(urlString);
         if (matcher.find()) {

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.util.List;
 
+// В този клас няма особено много бизнес логика, повечето неща са общи за всички паяци
 @Service
 public class VestiBgCrawlerService {
     private static final String NEWS_SITE = "vesti.bg";

@@ -5,7 +5,7 @@ import com.web.crawler.WebCrawler.repositories.NewsRepository;
 import edu.uci.ics.crawler4j.crawler.CrawlController;
 import edu.uci.ics.crawler4j.crawler.WebCrawler;
 
-
+// Създава нова инстанция на DnevnikBgCrawler
 public class DnevnikBgFactory implements CrawlController.WebCrawlerFactory<WebCrawler> {
     private final NewsFilter newsFilter;
     private final NewsRepository newsRepository;

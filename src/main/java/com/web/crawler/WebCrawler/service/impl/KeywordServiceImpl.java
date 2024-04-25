@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+// CRUD операции за ключовите думи
 @Service
 public class KeywordServiceImpl implements KeywordService {
     private final KeywordRepository keywordRepository;
@@ -27,15 +28,15 @@ public class KeywordServiceImpl implements KeywordService {
         this.keywordOccurrenceService = keywordOccurrenceService;
     }
 
+    // Извлича всички ключови думи на текущия/логнатия потребител
     @Override
     public List<Keyword> getAllKeywordsForUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName());
 
-        // Return only logged user's keywords
         List<Keyword> keywords = keywordRepository.findAllByDeletedFalse();
 
-        //Replaced while loop 'Collection.removeIf' suggested from the IJ
+        //Цикълът while е заменен с 'Collection.removeIf'(така препоръча интелиждей)
         keywords.removeIf(keyword -> !Objects.equals(keyword.getUserId().getId(), user.getId()));
 
         return keywords;
@@ -52,7 +53,7 @@ public class KeywordServiceImpl implements KeywordService {
 
     @Override
     public Keyword createKeyword(Keyword keyword) {
-        // Get the logged user
+        // Вземи логнатия потребител
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userRepository.findByUsername(auth.getName());
 

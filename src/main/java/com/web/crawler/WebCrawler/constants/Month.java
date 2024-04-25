@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+// Тъй като във vesti.bg датите са написани
+// така: 25 април 2024, вместо 25.04.2024
+// ни се налага да направим енъм, който превръща месеца в число
 public enum Month {
     JANUARY(1, "януари", "january"),
     FEBRUARY(2, "февруари", "february"),

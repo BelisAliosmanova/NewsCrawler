@@ -50,8 +50,10 @@ public class KeywordOccurrenceServiceImpl implements KeywordOccurrenceService {
         return loggedUserKeywordOccurrences;
     }
 
+    // Прави статистика на ключовите думи
     @Override
     public void generateDailyKeywordStatistics() {
+        // Пряви статистика само на днескашните думи
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String currentDateStr = currentDate.format(formatter);
@@ -63,9 +65,11 @@ public class KeywordOccurrenceServiceImpl implements KeywordOccurrenceService {
             int occurrence = 0;
 
             for (News news : newsList) {
+                // Гледаме да няма значение дали буквите са малки или големи
                 keyword.setName(keyword.getName().toLowerCase());
                 news.setHeading(news.getHeading().toLowerCase());
 
+                // Проверяваме дали новината съдържа ключовата дума
                 if (news.getHeading().contains(keyword.getName())) {
                     occurrence++;
                 }
@@ -76,6 +80,7 @@ public class KeywordOccurrenceServiceImpl implements KeywordOccurrenceService {
                 keywordOccurrence.setDailyOccurrences(occurrence);
                 keywordOccurrence.setDate(LocalDate.now().toString());
 
+                // Запаметяваме срещнатата дума заедно с това, колко пъти се среща
                 List<KeywordOccurrence> allKeywordOccurrences = keywordOccurrenceRepository.findAll();
                 if (!allKeywordOccurrences.isEmpty()) {
                     boolean isAlreadySaved = false;
